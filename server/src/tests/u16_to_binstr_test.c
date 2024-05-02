@@ -6,6 +6,7 @@
 #include "../util/u16_pow.c"
 
 #include <assert.h>
+#include <stdlib.h>
 
 void u16_to_binstr_test()
 {

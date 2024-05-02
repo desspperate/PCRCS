@@ -1,15 +1,9 @@
 #ifndef MALLOC_WRAPPER_C
 #define MALLOC_WRAPPER_C
 
-#include <stdlib.h>
-#include <stddef.h>
+#include <malloc.h>
 
-static void null_check(void *p)
-{
-    if (p == NULL) {
-        exit(EXIT_FAILURE);
-    }
-}
+#include "static/ptr_check.c"
 
 void *malloc_(size_t __size)
 {
@@ -34,6 +28,7 @@ void *realloc_(void *__ptr, size_t __size)
 
 void free_(void *__ptr)
 {
+    null_check(__ptr);
     free(__ptr);
 }
 

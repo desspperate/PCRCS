@@ -12,7 +12,7 @@ u16 binstr_to_u16(char *binstr, size_t len)
 {
     assert(binstr[len - 1] == '\xff');
     assert(binstr != NULL);
-    assert(len < 18 && len > 1);
+    assert(len > 1 && len < 18);
 
     u16 res = 0;
 
