@@ -3,6 +3,10 @@
 
 int main(int argc, char **argv)
 {
+    FILE *log = fopen("server.log", "w");
+    fputs("Starting PCRCS (Personal Computer Remote Control System) server.", log);
+    fclose(log);
+
     if (args_are_invalid(argc, argv)) {
         puts("Arguments are invalid. You should write available port (1024 — 9999).");
         exit(EXIT_FAILURE);
@@ -16,7 +20,9 @@ int main(int argc, char **argv)
     int                 client_fd;
     u8                  buf [BUF_LEN + 1];
 
-    buf [BUF_LEN] = '\0';
+    for (int i = 0; i < BUF_LEN + 1; ++i) {
+        buf[i] = 0;
+    }
 
     port = str_to_u16(argv[1], 5);
     addr_len = sizeof(address);
@@ -35,16 +41,13 @@ int main(int argc, char **argv)
     rtype = (u8*)calloc_(1, sizeof(u8));
     rcode = (u16*)calloc_(1, sizeof(u16));
 
-    expression_status_t expression_status;
-
     for (;;) {
         client_fd = accept_(server_fd, 0, 0);
 
-        val_read = recv(client_fd, buf, BUF_LEN, 0);
+        val_read = recv_(client_fd, buf, BUF_LEN, 0);
         if (val_read == 0) {
             continue;
         }
-        buf[val_read] = '\0';
         rheader.bytes[0] = buf[0];
         rheader.bytes[1] = buf[1];
 
@@ -52,7 +55,7 @@ int main(int argc, char **argv)
 
         switch (*rtype) {
             case USER:
-                r_handler_user();
+                r_handler_user(*rcode, client_fd, buf);
                 break;
             case ADMIN:
                 r_handler_admin();
@@ -61,15 +64,15 @@ int main(int argc, char **argv)
                 r_handler_system();
                 break;
             default:
-                puts("Error 360");
-                expression_status = BAD_REQUEST;
-                send(client_fd, &expression_status, EXPRESSION_STATUS_SIZE, 0);
+                response(client_fd, BAD_REQUEST);
                 break;
         }
+        close(client_fd);
     }
 
     free_(rtype);
     free_(rcode);
     close(server_fd);
     exit(EXIT_SUCCESS);
+
 }

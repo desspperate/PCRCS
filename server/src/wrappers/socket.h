@@ -11,4 +11,8 @@ extern int listen_(int __fd, int __n);
 
 extern int accept_(int __fd, __SOCKADDR_ARG __addr, socklen_t *__restrict __addr_len);
 
+extern int send_(int __fd, const void *__buf, size_t __n, int __flags);
+
+extern int recv_(int __fd, void *__buf, size_t __n, int __flags);
+
 #endif

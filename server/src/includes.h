@@ -1,12 +1,12 @@
-#include "r_handler/r_types/user.h"
-#include "r_handler/r_types/admin.h"
-#include "r_handler/r_types/system.h"
-#include "r_handler/header.h"
+#include "handler/request_types/user.h"
+#include "handler/request_types/admin.h"
+#include "handler/request_types/system.h"
+#include "handler/header.h"
+#include "handler/responses/response.h"
 #include "wrappers/malloc.h"
 #include "wrappers/socket.h"
 #include "args_are_invalid.h"
 #include "util/str_to_u16.h"
-#include "expression_status.h"
 
 #include <stdio.h>
 #include <stdlib.h>

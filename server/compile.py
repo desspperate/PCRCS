@@ -19,11 +19,12 @@ def compile() -> int:
                           f'{config.SRC_PATH}/util/str_to_u16.c',
                           f'{config.SRC_PATH}/wrappers/malloc.c',
                           f'{config.SRC_PATH}/wrappers/socket.c',
-                          f'{config.SRC_PATH}/r_handler/header.c',                
-                          f'{config.SRC_PATH}/r_handler/r_types/user.c',                
-                          f'{config.SRC_PATH}/r_handler/r_types/admin.c',                
-                          f'{config.SRC_PATH}/r_handler/r_types/system.c',    
-                          f'{config.SRC_PATH}/args_are_invalid.c',            
+                          f'{config.SRC_PATH}/handler/header.c',                
+                          f'{config.SRC_PATH}/handler/request_types/user.c',                
+                          f'{config.SRC_PATH}/handler/request_types/admin.c',                
+                          f'{config.SRC_PATH}/handler/request_types/system.c', 
+                          f'{config.SRC_PATH}/handler/responses/response.c',  
+                          f'{config.SRC_PATH}/args_are_invalid.c',           
                           ])
     
     return res
