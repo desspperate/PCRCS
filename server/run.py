@@ -12,9 +12,7 @@ if compile.compile():
 else:
     print(f'[  {termcolor.colored("OK", "light_green")}  ] Compilation successfull.')
 
-
 server = subprocess.Popen([f'{config.BIN_PATH}/{config.EXECUTABLE_FILE_NAME}', sys.argv[1]], cwd='bin/')
-
 
 time.sleep(0.5)
 if server.poll():
@@ -31,9 +29,7 @@ while server.poll() is None:
         print('[  oO  ] Server is running...', end='\r')
         time.sleep(0.2)
     except KeyboardInterrupt:
-        print(f'\r[  {termcolor.colored("OK", "light_green")}  ] Server stopped successfully.')
         server.terminate()
-        exit()
         
 
 if server.poll():

@@ -3,14 +3,16 @@
 
 int main(int argc, char **argv)
 {
+    if (args_are_invalid(argc, argv)) {
+        FILE *log = fopen("server.log", "w");
+        fputs("Arguments are invalid. You should write available port (1024 — 9999).", log);
+        fclose(log);
+        exit(EXIT_FAILURE);
+    }
+
     FILE *log = fopen("server.log", "w");
     fputs("Starting PCRCS (Personal Computer Remote Control System) server.", log);
     fclose(log);
-
-    if (args_are_invalid(argc, argv)) {
-        puts("Arguments are invalid. You should write available port (1024 — 9999).");
-        exit(EXIT_FAILURE);
-    }
     
     int                 server_fd;
     int                 port;
@@ -41,6 +43,8 @@ int main(int argc, char **argv)
     rtype = (u8*)calloc_(1, sizeof(u8));
     rcode = (u16*)calloc_(1, sizeof(u16));
 
+    map *users_queues = map_init();
+
     for (;;) {
         client_fd = accept_(server_fd, 0, 0);
 
@@ -55,7 +59,7 @@ int main(int argc, char **argv)
 
         switch (*rtype) {
             case USER:
-                r_handler_user(*rcode, client_fd, buf);
+                r_handler_user(*rcode, client_fd, buf, &users_queues);
                 break;
             case ADMIN:
                 r_handler_admin();
@@ -64,12 +68,14 @@ int main(int argc, char **argv)
                 r_handler_system();
                 break;
             default:
-                response(client_fd, BAD_REQUEST);
+                response(client_fd, BAD_REQUEST, NULL, 0);
                 break;
         }
         close(client_fd);
     }
 
+    map_destruct(users_queues);
+    /* !!!Need to clear all queues here!!! */
     free_(rtype);
     free_(rcode);
     close(server_fd);

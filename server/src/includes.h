@@ -12,3 +12,7 @@
 #include <stdlib.h>
 #include <arpa/inet.h>
 #include <unistd.h>
+
+/* include things to rewrite */
+#include "hashmap/hash_map.h"
+#include "queue/queue.h"

@@ -56,9 +56,13 @@ if __name__ == '__main__':
         client_fd.send(request_buf)
         
         response = client_fd.recv(BUF_LEN)
+        # print(response)
         
-        expression_status = int.from_bytes(response, 'little')
+        response_status = int.from_bytes(response[0:4], 'little')
         
-        print(f'expression status = {expression_status}')
+        # print(f'response status = {response_status}')
+        
+        if response_status == 92:
+            print(f'command: {response[4:].decode()}')
         
         client_fd.close()

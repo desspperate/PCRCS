@@ -6,9 +6,10 @@
 typedef enum {
     BUG = 0,
     SUCCESS = 1,
-    COMMAND_RECEIVED = 91,
-    QUEUE_IS_CLEAR = 92,
-    RESULT_LOGGED = 93,
+    QUEUE_CREATED = 91,
+    COMMAND_RECEIVED = 92,
+    QUEUE_IS_CLEAR = 93,
+    RESULT_LOGGED = 94,
     RESULT_NOT_LOGGED = 181,
     BAD_REQUEST = 360,
 } response_status;

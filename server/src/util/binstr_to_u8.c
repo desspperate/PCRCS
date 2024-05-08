@@ -4,8 +4,6 @@
 #include <assert.h>
 #include <stddef.h>
 
-#include "u8_pow.h"
-
 typedef unsigned char u8;
 
 u8 binstr_to_u8(char *binstr, size_t len)
@@ -15,12 +13,12 @@ u8 binstr_to_u8(char *binstr, size_t len)
     assert(len < 10 && len > 1);
 
     u8 res = 0;
+    u8 multiplyer = 1;
 
-    for (int i = 0; i < len - 1; ++i) {
+    for (int i = len - 2; i >= 0; --i) {
         assert(binstr[i] == 0 || binstr[i] == 1);
-        if (binstr[i] == 1) {
-            res += u8_pow(2, len - 2 - i);
-        }
+        res += binstr[i] * multiplyer;
+        multiplyer *= 2;
     }
 
     return res;
