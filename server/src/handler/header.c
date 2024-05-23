@@ -12,8 +12,6 @@ typedef unsigned short u16;
 #include "../util/binstr_to_u16.h"
 #include "../wrappers/malloc.h"
 
-#include "../util/binstr_print.h"
-
 void get_rtype_and_rcode(u8 *rtype_ptr, u16 *rcode_ptr, u16 rheader)
 {
     assert(rtype_ptr != NULL);

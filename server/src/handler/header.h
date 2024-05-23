@@ -1,6 +1,8 @@
 #ifndef HEADER_HANDLER_H
 #define HEADER_HANDLER_H
 
+#define HEADER_LEN 2
+
 typedef unsigned short u16;
 typedef unsigned char  u8;
 

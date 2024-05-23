@@ -4,15 +4,15 @@
 int main(int argc, char **argv)
 {
     if (args_are_invalid(argc, argv)) {
-        FILE *log = fopen("server.log", "w");
-        fputs("Arguments are invalid. You should write available port (1024 — 9999).", log);
-        fclose(log);
+        FILE *log = fopen_("server.log", "w");
+        fputs_("Arguments are invalid. You should write available port (1024 — 9999).", log);
+        fclose_(log);
         exit(EXIT_FAILURE);
     }
 
-    FILE *log = fopen("server.log", "w");
-    fputs("Starting PCRCS (Personal Computer Remote Control System) server.", log);
-    fclose(log);
+    FILE *log = fopen_("server.log", "w");
+    fputs_("Starting PCRCS (Personal Computer Remote Control System) server.", log);
+    fclose_(log);
     
     int                 server_fd;
     int                 port;
@@ -43,26 +43,30 @@ int main(int argc, char **argv)
     rtype = (u8*)calloc_(1, sizeof(u8));
     rcode = (u16*)calloc_(1, sizeof(u16));
 
-    map *users_queues = map_init();
+    map     *users_queues = map_init();
+    dynamic *queues = dyn_init();
 
     for (;;) {
         client_fd = accept_(server_fd, 0, 0);
 
         val_read = recv_(client_fd, buf, BUF_LEN, 0);
-        if (val_read == 0) {
+        if (val_read < 2) {
+            response(client_fd, BAD_REQUEST, NULL, 0);
             continue;
         }
-        rheader.bytes[0] = buf[0];
-        rheader.bytes[1] = buf[1];
+        buf[val_read] = 0;
+        rheader.bytes[0] = buf[1];
+        rheader.bytes[1] = buf[0];
 
         get_rtype_and_rcode(rtype, rcode, rheader.s);
 
+        int need_to_exit = 0;
         switch (*rtype) {
             case USER:
-                r_handler_user(*rcode, client_fd, buf, &users_queues);
+                r_handler_user(*rcode, client_fd, buf, &users_queues, queues);
                 break;
             case ADMIN:
-                r_handler_admin();
+                need_to_exit = r_handler_admin(*rcode, client_fd, buf, queues);
                 break;
             case SYSTEM:
                 r_handler_system();
@@ -71,14 +75,22 @@ int main(int argc, char **argv)
                 response(client_fd, BAD_REQUEST, NULL, 0);
                 break;
         }
-        close(client_fd);
+        close_(client_fd);
+        if (need_to_exit) {
+            break;
+        }
     }
 
     map_destruct(users_queues);
-    /* !!!Need to clear all queues here!!! */
+    for (int i = 0; i < queues->length; ++i) {
+        queue *tmp_queue = dyn_get(queues, i);
+        for (int j = 0; j < tmp_queue->length; ++j) {
+            free_(tmp_queue->storage->array[j]);
+        }
+        queue_destruct(tmp_queue);
+    }
     free_(rtype);
     free_(rcode);
-    close(server_fd);
+    close_(server_fd);
     exit(EXIT_SUCCESS);
-
 }

@@ -1,0 +1,18 @@
+responses = {
+    0:   'Bug.',
+    180: 'Command successfully pushed.',
+    181: 'Server stopped successfully.',
+    183: 'New admin added successfully.',
+    360: 'Bad request.',
+    540: 'You haven\'t enough permissions to push commands.',
+    541: 'You haven\'t enough permissions to add new admins.',
+    542: 'You haven\'t enough permissions to add new admins with this access level.', 
+    543: 'You haven\'t enough permissions to stop PCRCS server.',
+    544: 'Please, use only ASCII (33 - 126) for login and password.',
+    545: 'Login is too long.',
+    546: 'Login is too small.',
+    547: 'Password is too long.',
+    548: 'Password is too small.',
+    549: 'Incorrect marking of authorization data.',
+    890: 'Zero users.',
+}

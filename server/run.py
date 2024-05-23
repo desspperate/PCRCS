@@ -33,8 +33,8 @@ while server.poll() is None:
         
 
 if server.poll():
-    print(f'[{termcolor.colored("FAILED", "light_red")}] Server stopped due to a error.')
+    print(f'\r[{termcolor.colored("FAILED", "light_red")}] Server stopped due to a error.')
     exit()
 else:
-    print(f'[  {termcolor.colored("OK", "light_green")}  ] Server stopped successfully.')
+    print(f'\r[  {termcolor.colored("OK", "light_green")}  ] Server stopped successfully.')
     exit()

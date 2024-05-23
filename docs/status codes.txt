@@ -1,0 +1,61 @@
+0           BUG
+1   - 359   OK
+360 - 709   ERROR 
+710 - 1059  WARN
+1059 - 1409 PANIC
+
+
+0. BUG (Request didn't call anything)
+
+
+OK 1 - 359:
+General oks 1 - 90:
+1. Success
+
+User oks 91 - 180:
+91. Queue created
+92. Command received
+93. Queue is empty
+94. Result logged
+
+Admin oks 180 - 189:
+180. Success push
+181. Success exit
+182. Access level
+183. New admin added successfully
+
+
+ERROR 360 - 699:
+General errors 360 - 449:
+360. Bad Request
+
+User errors 450 - 539:
+450. Result couldn't be logged
+
+Admin errors 540 - 629:
+540. You haven't enough permissions to push commands
+541. You haven't enough permissions to add new admins 
+542. You haven't enough permissions to add new admins with this access level 
+543. You haven't enough permissions to stop PCRCS server
+544. Please use only ascii symbols (33 - 126) for login and password
+545. Login is too long
+546. Login is too small
+547. Password is too long
+548. Password is too small
+549. Incorrect marking of authorization data
+
+System errors 630 - 709:
+
+
+WARN 710 - 1059:
+General warns 710 - 799:
+
+User warns 800 - 889:
+
+Admin warns 890 - 979:
+890. Zero users
+
+System warns 980 - 1069:
+
+
+1059 - 1409 PANIC:

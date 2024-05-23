@@ -5,25 +5,24 @@
 #include <string.h>
 
 #include "user.h"
-#include "../responses/response.h"
-#include "../../wrappers/malloc.h"
-#include "../../wrappers/socket.h"
-#include "../../util/u8_to_str.h"
-#include "../../hashmap/hash_map.h"
-#include "../../queue/queue.h"
+#include "../../response/response.h"
+#include "../../../wrappers/malloc.h"
+#include "../../../wrappers/socket.h"
+#include "../../../util/u8_to_str.h"
+#include "../../../hashmap/hash_map.h"
+#include "../../../queue/queue.h"
+#include "../../../queue/dynamic_array.h"
 
 typedef unsigned char u8;
 
-void r_handler_user(rcodes_user rcode, int client_fd, char *buf, map **users_queues)
+void r_handler_user(rcodes_user rcode, int client_fd, char *buf, map **users_queues, dynamic *queues)
 {
     assert(buf != NULL);
     assert(users_queues != NULL);
     assert(*users_queues != NULL);
+    assert(queues != NULL);
 
-    u8 user_id [16];
-    for (int i = 0; i < 16; ++i) {
-        user_id[i] = buf[2 + i];
-    }
+    u8 *user_id = buf + 2;
 
     char *user_id_str = (char*)calloc_(49, sizeof(char));
     int i = 0;
@@ -49,10 +48,11 @@ void r_handler_user(rcodes_user rcode, int client_fd, char *buf, map **users_que
                 
                 user_queue = queue_init();
                 map_put(users_queues, user_id_str_copy, user_queue);
+                dyn_append(queues, user_queue);
                 response(client_fd, QUEUE_CREATED, NULL, 0);
             } else {
                 if (queue_is_empty(user_queue)) {
-                    response(client_fd, QUEUE_IS_CLEAR, NULL, 0);
+                    response(client_fd, QUEUE_IS_EMPTY, NULL, 0);
                 } else {
                     u8 *command = (u8*)queue_pop(user_queue);
                     response(client_fd, COMMAND_RECEIVED, command, strlen((char*)command));

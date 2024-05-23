@@ -10,18 +10,18 @@ typedef unsigned char u8;
 typedef union {
     u8  bytes [4];
     int i;
-} raw_int;
+} raw_response_status;
 
 void response(int client_fd, response_status status, u8 *data, size_t data_len)
 {
     if (data == NULL) {
         response_status status_ = status;
-        send(client_fd, &status_, RESPONSE_STATUS_SIZE, 0);
+        send_(client_fd, &status_, RESPONSE_STATUS_SIZE, 0);
         return;
     }
 
     u8 *response = (u8*)calloc_(data_len + RESPONSE_STATUS_SIZE, sizeof(char));
-    raw_int raw_status = { status };
+    raw_response_status raw_status = { status };
     for (int i = 0; i < 4; ++i) {
         response[i] = raw_status.bytes[i];
     }
@@ -30,6 +30,7 @@ void response(int client_fd, response_status status, u8 *data, size_t data_len)
     }
     
     send_(client_fd, response, data_len + RESPONSE_STATUS_SIZE, 0);
+    free_(response);
 }
 
 #endif
